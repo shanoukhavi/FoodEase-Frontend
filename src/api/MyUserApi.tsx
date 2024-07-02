@@ -53,7 +53,10 @@ export const useCreateMyUser = () => {
       body: JSON.stringify(user)
     });
 
-    if (!response.ok) throw new Error("Failed to create user");
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Failed to create user: ${errorMessage}`);
+    }
   };
 
   const { mutateAsync: createUser, isLoading, isError, isSuccess } = useMutation(createMyUserRequest);
@@ -83,7 +86,8 @@ export const useUpdateMyUser = () => {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to update user");
+      const errorMessage = await response.text();
+      throw new Error(`Failed to update user: ${errorMessage}`);
     }
 
     return response.json();
