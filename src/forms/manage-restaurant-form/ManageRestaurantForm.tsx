@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DetailsSection from "./DetailsSection";
-import { Separator} from "@/components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import CusinesSection from "./CusinesSection";
 import MenuSection from "./MenuSection";
 import LoadingButton from "@/components/LoadingButton";
@@ -57,17 +57,24 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
   });
 
   const onSubmit = (formDataJson: RestaurantFormData) => {
-    // todo convert formDataJson to a new FormData object mate 
+    // Convert formDataJson to a new FormData object
     const formData = new FormData();
-    Object.entries(formDataJson).forEach(([key, value]) => {
-      if (key === "menuItems" || key === "cuisines") {
-        formData.append(key, JSON.stringify(value));
-      } else {
-        formData.append(key, value as any);
-      }
+    formData.append("restaurantName", formDataJson.restaurantName);
+    formData.append("city", formDataJson.city);
+    formData.append("country", formDataJson.country);
+    formData.append("deliveryPrice", (formDataJson.deliveryPrice * 100).toString());
+    formData.append("estimateDeliveryTime", formDataJson.estimateDeliveryTime.toString());
+    // this is for cusine mate 
+    formDataJson.cuisines.forEach((cuisine, index) => {
+      formData.append(`cuisines[${index}]`, cuisine);
+    });
+//this is for menuItems mate because it can be two things u have to name it instead of writting by urself mate 
+    formDataJson.menuItems.forEach((item, index) => {
+      formData.append(`menuItems[${index}][name]`, item.name);
+      formData.append(`menuItems[${index}][price]`, (item.price*100).toString());
     });
     formData.append("imageFile", formDataJson.imageFile);
-
+    
     onSave(formData);
   };
 
@@ -78,17 +85,13 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
         className="space-y-8 bg-gray-50 p-10 rounded-lg"
       >
         <DetailsSection />
-        {/* this is sthe line which is been often said as sepertor mate  */}
-        <Separator/>
-        {/* <button type="submit" disabled={isLoading}>
-          {isLoading ? "Saving..." : "Save"}
-        </button> */}
-        <CusinesSection/>
-        <Separator/>
-        <MenuSection/>
-        <Separator/>
-        <ImageSection/>
-        {isLoading ?<LoadingButton/>:<Button type="submit">Submit</Button>}
+        <Separator />
+        <CusinesSection />
+        <Separator />
+        <MenuSection />
+        <Separator />
+        <ImageSection />
+        {isLoading ? <LoadingButton /> : <Button type="submit">Submit</Button>}
       </form>
     </Form>
   );
