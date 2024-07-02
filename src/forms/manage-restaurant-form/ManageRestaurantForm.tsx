@@ -3,6 +3,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import DetailsSection from "./DetailsSection";
+import { Separator} from "@/components/ui/separator";
+import CusinesSection from "./CusinesSection";
+import MenuSection from "./MenuSection";
+import LoadingButton from "@/components/LoadingButton";
+import { Button } from "@/components/ui/button";
+import ImageSection from "./ImageSection";
 
 const formSchema = z.object({
   restaurantName: z.string({
@@ -51,6 +57,7 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
   });
 
   const onSubmit = (formDataJson: RestaurantFormData) => {
+    // todo convert formDataJson to a new FormData object mate 
     const formData = new FormData();
     Object.entries(formDataJson).forEach(([key, value]) => {
       if (key === "menuItems" || key === "cuisines") {
@@ -71,9 +78,17 @@ const ManageRestaurantForm = ({ onSave, isLoading }: Props) => {
         className="space-y-8 bg-gray-50 p-10 rounded-lg"
       >
         <DetailsSection />
-        <button type="submit" disabled={isLoading}>
+        {/* this is sthe line which is been often said as sepertor mate  */}
+        <Separator/>
+        {/* <button type="submit" disabled={isLoading}>
           {isLoading ? "Saving..." : "Save"}
-        </button>
+        </button> */}
+        <CusinesSection/>
+        <Separator/>
+        <MenuSection/>
+        <Separator/>
+        <ImageSection/>
+        {isLoading ?<LoadingButton/>:<Button type="submit">Submit</Button>}
       </form>
     </Form>
   );
