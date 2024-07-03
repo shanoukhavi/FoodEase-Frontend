@@ -1,6 +1,6 @@
 export type User={
     _id:string,
-    emnail:string,
+    email:string,
     name:string,
     addressLine1:string,
     city:string,
@@ -11,16 +11,17 @@ export type MenuItem={
     name:string;
     price:number;
 }
-export type Restaurant={
-    _id:string;
-    user:string;
-    restaurantName:string;
-    city:string;
-    country:string;
-    estimateDeliveryTime:number;
-    cuisines:string[];
-    menuItems:MenuItem[];
-    imageUrl:string;
-    lastUpdated:string;
-
-}
+export type Restaurant = {
+    _id: string;
+    user: string;
+    restaurantName: string;
+    city: string;
+    country: string;
+    estimateDeliveryTime: number;
+    cuisines: string[];
+    menuItems: MenuItem[];
+    imageUrl: string;
+    lastUpdated: string;
+    deliveryPrice: number; // Add this line
+  };
+  
