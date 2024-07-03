@@ -1,19 +1,23 @@
 // ManageRestaurantPage.tsx
-import { useCreateMyRestaurant, useGetMyRestaurant } from "@/api/MyRestaurantApi";
+import { useCreateMyRestaurant, useGetMyRestaurant, useUpdateMyRestaurant } from "@/api/MyRestaurantApi";
 import ManageRestaurantForm from "@/forms/manage-restaurant-form/ManageRestaurantForm";
 
 const ManageRestaurantPage = () => {
-  const { createMyRestaurant, isLoading } = useCreateMyRestaurant();
+  const { createMyRestaurant, isLoading: isCreateLoading } = useCreateMyRestaurant();
   const { restaurant, isLoading: isRestaurantLoading } = useGetMyRestaurant();
+  const { updateRestaurant, isLoading: isUpdateLoading } = useUpdateMyRestaurant();
 
   // Combine loading states
-  const isFormLoading = isLoading || isRestaurantLoading;
+  const isLoading = isCreateLoading || isUpdateLoading || isRestaurantLoading;
+
+  // Determine if we are editing an existing restaurant or creating a new one
+  const isEditing = !!restaurant;
 
   return (
     <ManageRestaurantForm
       restaurant={restaurant}
-      onSave={createMyRestaurant}
-      isLoading={isFormLoading}
+      onSave={isEditing ? updateRestaurant : createMyRestaurant}
+      isLoading={isLoading}
     />
   );
 };
