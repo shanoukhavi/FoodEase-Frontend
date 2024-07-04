@@ -1,43 +1,48 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import React from "react";
+import { Navigate, useRoutes } from "react-router-dom";
 import Layout from "./layouts/layout";
 import HomePage from "./pages/HomePage";
 import AuthCallBackPage from "./pages/AuthCallBackPage";
-import UserProfilePage from "./pages/UserProfilePage";
+import SearchPage from "./pages/SearchPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import UserProfilePage from "./pages/UserProfilePage";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 
 const AppRoutes = () => {
-  return (
-    <Routes>
-      <Route 
-        path="/" 
-        element={<Layout showHero={true}><HomePage /></Layout>} 
-      />
-      <Route 
-        path="/auth-callback" 
-        element={<AuthCallBackPage />} 
-      />
-      <Route element={<ProtectedRoute/>}>
-      <Route 
-        path="/user-profile" 
-        element={<Layout showHero={false}><UserProfilePage /></Layout>} 
-      />
+  const routes = useRoutes([
+    {
+      path: "/",
+      element: <Layout showHero={true}><HomePage /></Layout>,
+    },
+    {
+      path: "/auth-callback",
+      element: <AuthCallBackPage />,
+    },
+    {
+      path: "/search/:city",
+      element: <Layout showHero={false}><SearchPage /></Layout>,
+    },
+    {
+      element: <ProtectedRoute />,
+      children: [
+        {
+          path: "/user-profile",
+          element: <Layout showHero={false}><UserProfilePage /></Layout>,
+        },
+        {
+          path: "/manage-restaurant",
+          element: <Layout showHero={false}><ManageRestaurantPage /></Layout>,
+        },
+      ],
+    },
+    {
+      path: "*",
+      element: <Navigate to="/" />,
+    },
+  ]);
 
-<Route 
-        path="/manage-restaurant" 
-        element={<Layout showHero={false}><ManageRestaurantPage /></Layout>} 
-      />
-      
-      </Route>
-
-      
- 
-      <Route 
-        path="*" 
-        element={<Navigate to="/" />} 
-      />
-    </Routes>
-  );
+  return routes;
 };
 
 export default AppRoutes;
+

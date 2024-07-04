@@ -1,23 +1,23 @@
+import React, { useEffect, useRef } from "react";
 import { useCreateMyUser } from "@/api/MyUserApi";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-const AuthCallBackPage=()=>{
-    const navigate=useNavigate();
-const {user}=useAuth0();
-const {createUser}=useCreateMyUser();
-const hasCreatedUser=useRef(false);
-useEffect(()=>{
-    if(user?.sub && user?.email && !hasCreatedUser.current) {
-        createUser({auth0Id:user.sub,email:user.email});
-        hasCreatedUser.current=true;
-        } 
-        navigate("/");
+const AuthCallBackPage = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth0();
+  const { createUser } = useCreateMyUser();
+  const hasCreatedUser = useRef(false);
 
-},[createUser,navigate,user]);
-return <>Loading...</>
+  useEffect(() => {
+    if (user?.sub && user?.email && !hasCreatedUser.current) {
+      createUser({ auth0Id: user.sub, email: user.email });
+      hasCreatedUser.current = true;
+    }
+    navigate("/");
+  }, [createUser, navigate, user]);
+
+  return <>Loading...</>;
 };
 
 export default AuthCallBackPage;
-// here  from auth0 it sees sucht that user is logedin or not mate at the last we see that user has createad and no  duplicate users are present and bring in to the home page 

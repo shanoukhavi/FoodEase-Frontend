@@ -24,4 +24,11 @@ export type Restaurant = {
     lastUpdated: string;
     deliveryPrice: number; // Add this line
   };
-  
+export type RestaurantSearchResponse={
+    data:Restaurant[];
+    pagination:{
+        total:number,
+        page:number,
+        pages:number
+    }
+}  
