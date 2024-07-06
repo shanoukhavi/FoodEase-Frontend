@@ -7,7 +7,7 @@ import SortOptionDropdown from "@/components/SortOptionDropdown";
 import SearchBar, { SearchForm } from "@/SearchBar";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Restaurant, RestaurantSearchResponse } from "@/types"; // Import the types
+import { Restaurant, RestaurantSearchResponse } from "@/types";
 
 export type SearchState = {
   searchQuery: string;
@@ -112,22 +112,6 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
