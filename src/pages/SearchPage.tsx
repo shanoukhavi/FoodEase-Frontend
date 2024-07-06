@@ -7,7 +7,7 @@ import SortOptionDropdown from "@/components/SortOptionDropdown";
 import SearchBar, { SearchForm } from "@/SearchBar";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Restaurant, RestaurantSearchResponse } from "@/types";
+import { Restaurant } from "@/types";
 
 export type SearchState = {
   searchQuery: string;
