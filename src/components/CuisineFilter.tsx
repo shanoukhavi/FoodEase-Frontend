@@ -35,7 +35,7 @@ const CuisineFilter = ({ onChange, selectedCuisines, isExpanded, onExpandedClick
         {cuisineList.slice(0, isExpanded ? cuisineList.length : 7).map((cuisine) => {
           const isSelected = selectedCuisines.includes(cuisine);
           return (
-            <div key={cuisine} className="flex">
+            <div key={cuisine} className="flex items-center">
               <input
                 id={`cuisine_${cuisine}`}
                 type="checkbox"
@@ -48,6 +48,9 @@ const CuisineFilter = ({ onChange, selectedCuisines, isExpanded, onExpandedClick
                 htmlFor={`cuisine_${cuisine}`}
                 className={`flex flex-1 items-center cursor-pointer text-sm rounded-full px-4 py-2 font-semibold ${isSelected ? "border border-green-600 text-green-600" : "border border-slate-300"}`}
               >
+                <span className={`mr-2 ${isSelected ? "block" : "hidden"}`}>
+                  &#10003;
+                </span>
                 {cuisine}
               </Label>
             </div>
