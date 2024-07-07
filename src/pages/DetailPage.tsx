@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { MenuItem as MenuItemType } from "../types";
 import CheckoutButton from "@/components/CheckoutButton";
 import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
+import { useCreateCheckoutSession } from "@/api/OrderApi";
 
 export type CartItem = {
   _id: string;
@@ -20,14 +21,15 @@ export type CartItem = {
 const DetailPage = () => {
   const { restaurantId } = useParams<{ restaurantId: string }>();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-  const [cartItems, setCartItems] = useState<CartItem[]>(()=>{
-    const storedCarItems=sessionStorage.getItem(`cartItems-${restaurantId}`);
-    return storedCarItems ? JSON.parse(storedCarItems):[];
-  }); // Initialize as empty array means that if u have the items while logigngit=f it to goes so u usee this storeCardItems which wil store it mate
+  const { createCheckoutSession, isLoading: isCheckLoading } = useCreateCheckoutSession();
+  
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
 
   const addToCart = (menuItem: MenuItemType) => {
     setCartItems((prevCartItems) => {
-      // Check if the item is in the cart. If it is, update the quantity. If not, add it to the cart.
       const existingCartItem = prevCartItems.find((cartItem) => cartItem._id === menuItem._id);
       let updatedCartItems;
       if (existingCartItem) {
@@ -40,7 +42,7 @@ const DetailPage = () => {
           { _id: menuItem._id, name: menuItem.name, price: menuItem.price, quantity: 1 },
         ];
       }
-      sessionStorage.setItem(`cartItems-${restaurantId}`,JSON.stringify(updatedCartItems));
+      sessionStorage.setItem(`cartItems-${restaurantId}`, JSON.stringify(updatedCartItems));
       return updatedCartItems;
     });
   };
@@ -48,13 +50,38 @@ const DetailPage = () => {
   const removeFromCart = (cartItem: CartItem) => {
     setCartItems((prevCartItems) => {
       const updatedCartItems = prevCartItems.filter((item) => cartItem._id !== item._id);
+      sessionStorage.setItem(`cartItems-${restaurantId}`, JSON.stringify(updatedCartItems));
       return updatedCartItems;
     });
   };
-  const onCheckOut = (userFormData:UserFormData) => {
-    // Navigate to checkout page
-    console.log("userFormData",userFormData);
-    
+
+  const onCheckOut = async (userFormData: UserFormData) => {
+    if (!restaurant) {
+      return;
+    }
+    const checkoutData = {
+      cartItems: cartItems.map((cartItem) => ({
+        menuItem: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity,
+      })),
+      restaurantId: restaurant._id,
+      deliveryDetails: {
+        name: userFormData.name,
+        addressLine1: userFormData.addressLine1,
+        city: userFormData.city,
+        country: userFormData.country,
+        email: userFormData.email as string,
+      },
+    };
+    try {
+      const data = await createCheckoutSession(checkoutData);
+      if (data?.url) {
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Checkout session creation failed:', error);
+    }
   };
 
   if (isLoading) {
@@ -82,14 +109,12 @@ const DetailPage = () => {
             />
           ))}
         </div>
-        {/* left col */}
         <div>
           <Card>
             <OrderSummary restaurant={restaurant} cartItems={cartItems} removeFromCart={removeFromCart} />
           </Card>
-          {/* now see that login for login or the name for the checkout name mate  */}
           <CardFooter>
-            <CheckoutButton disabled={cartItems.length===0} onCheckout={onCheckOut}/>
+            <CheckoutButton disabled={cartItems.length === 0 || isCheckLoading} onCheckout={onCheckOut} isLoading={isCheckLoading} />
           </CardFooter>
         </div>
       </div>
@@ -98,3 +123,4 @@ const DetailPage = () => {
 };
 
 export default DetailPage;
+// 13:38 

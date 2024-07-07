@@ -10,9 +10,10 @@ import type { UserFormData } from "@/forms/user-profile-form/UserProfileForm"; /
 type Props = {
   onCheckout: (userFormData: UserFormData) => void;
   disabled: boolean;
+  isLoading: boolean;
 };
 
-const CheckoutButton = ({ onCheckout, disabled }: Props) => {
+const CheckoutButton = ({ onCheckout, disabled,isLoading }: Props) => {
   const { isAuthenticated, isLoading: isAuthLoading, loginWithRedirect } = useAuth0();
   const { pathname } = useLocation();
   const { currentUser, isLoading: isGetUserLoading } = useGetMyUser();
@@ -30,7 +31,7 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
     return <Button onClick={onLogin} className="bg-orange-500 flex-1">Login to check out</Button>;
   }
 
-  if (isAuthLoading || !currentUser) {
+  if (isAuthLoading || !currentUser || isLoading) {
     // if the user is loading
     return <LoadingButton />;
   }
@@ -53,4 +54,4 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
 };
 
 export default CheckoutButton;
-// 1250 stripe implementation
+// 1250 stripe implementation from  froms u collect info send into backend accept all the data open a secure connectio using stripe create or open the account otr the oage in thee stripe all the dat is taken by it order detail are svaed in out db again u will get i the localhost order has been payed or nto wee will see it here ate 
