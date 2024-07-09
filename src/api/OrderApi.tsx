@@ -24,7 +24,7 @@ export const useCreateCheckoutSession = () => {
 
   const createCheckoutSessionRequest = async (checkoutSessionRequest: CheckoutSessionRequest) => {
     const accessToken = await getAccessTokenSilently();
-    const response = await fetch(`${API_BASE_URL}/api/order/checkout/create-checkout-session`, { // Ensure this path matches your backend route
+    const response = await fetch(`${API_BASE_URL}/api/order/checkout/create-checkout-session`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
