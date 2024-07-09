@@ -20,6 +20,7 @@ const UserProfilePage = () => {
       currentUser={currentUser}
       onSave={updateUser}
       isLoading={isUpdateLoading}
+      buttonText="Save Changes" // Added buttonText prop
     />
   );
 };
