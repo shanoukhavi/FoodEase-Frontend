@@ -24,6 +24,33 @@ export type Restaurant = {
     lastUpdated: string;
     deliveryPrice: number; // Add this line
   };
+  export type OrderStatus="placed"|"paid"|"inProgress"|"outForDelivery"|"delivered";
+//   status could e anything one of them i possible here so it can paid progress or placed mate 
+  export type Order={
+_id:string;
+restaurant:Restaurant;
+user:User;
+cartItems:{
+    menuItemId:string;
+    name:string;
+    quantity:string;
+}[];
+
+deliveryDetails:{
+
+    name:string;
+    adressLine1:string;
+    city:string;
+    email:string;
+};
+
+
+totalAmount:number;
+status:OrderStatus;
+createdAt:string;
+restaurantId:string;
+}
+//   here when the person orders he want went itll be comnng so it is given tohime 
 export type RestaurantSearchResponse={
     data:Restaurant[];
     pagination:{
