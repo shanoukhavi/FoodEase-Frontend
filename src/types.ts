@@ -39,7 +39,7 @@ cartItems:{
 deliveryDetails:{
 
     name:string;
-    adressLine1:string;
+    addressLine1:string;
     city:string;
     email:string;
 };
